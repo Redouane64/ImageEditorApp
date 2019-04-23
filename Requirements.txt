@@ -1,0 +1,33 @@
+The objective is to create a mobile application (Android by default) that can work in image editing mode, implementing the following functionality:
+1) Image rotation. 
+The user opens the original image and selects what degree to rotate the image to. The goal is to get a new image rotated to the chosen degree.
+Bonus: rotations not divisible by 90 degrees, providing a solution to the problem of required frame.
+
+2) Colour correction and colour filters.
+The user opens the original image and selects a colour filter. The goal is to get a new image with the chosen filter applied. There should be at least three different filters.
+Bonus: implementation of additional algorithmically different filters (when a green colour filter is already implemented, a red colour one won't count as different).
+
+3) Image scaling.
+The user opens the original image and enters the scale ratio. The goal is to get the scaled image.
+Bonus: getting rid of jaggies when doing large scaling.
+
+4) Image segmentation. 
+The user opens the original image and selects segmentation mode. The goal is to get an image with highlighted segments. The minimum functionality should contain identifying geometric shapes in images that contain them.
+Bonus: more complex segmentation (e.g., contours of objects, people, close and far objects), in photos as well. When solving complex tasks it is allowed to use ready-made solutions for segmentation (Open CV).
+
+5) Visualization of A* algorithm. 
+The user generates a field, selects the start and the finish points, creates obstacles on the field, initializes A*, and the system draws a path from the start to the finish.
+Bonus: a possibility to choose different heuristics and passage rules (for instance, whether it is possible to walk diagonally. If yes, then whether it is possible to walk diagonally if one of the corner cells is blocked, etc.).
+
+6) Drawing broken lines and interpolating them with splines.
+The user creates a sequence of points that form a broken line by touching the screen, switches on interpolation; the broken line becomes a spline.
+Bonus: a possibility to change the convexity of certain spline intervals.
+
+7) Retouching.
+The user opens the original image, selects retouch mode and swipes the area that should be retouched. The goal is to get a retouched image.
+
+8) Unsharp masking. 
+The user opens the original image, selects unsharp masking and determines the ratios. The goal is to get a processed image.
+
+9) Bilinear and trilinear filtering.
+The user opens the original image, specifies three points on it and specifies three resulting points on a new image. The goal is to get an edited image. You should use bilinear filtering when making the image larger, trilinear filtering - when making it smaller.
