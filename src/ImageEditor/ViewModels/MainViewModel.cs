@@ -1,8 +1,5 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
-using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -11,7 +8,6 @@ namespace ImageEditor.ViewModels
     internal class MainViewModel : ViewModelBase
     {
         private ImageSource imageSource = null;
-        private SKCanvasView canvas;
 
         public MainViewModel()
         {
