@@ -22,6 +22,8 @@
                     Value="{StaticResource BorderColor}" />
             <Setter Property="BorderWidth"
                     Value="1" />
+            <Setter Property="VerticalOptions"
+                    Value="CenterAndExpand" />
         </Style>
 
         <Style x:Key="OptionsButtonStyle"
@@ -38,6 +40,10 @@
                     Value="{StaticResource BorderColor}" />
             <Setter Property="BorderWidth"
                     Value="1" />
+            <Setter Property="Margin"
+                    Value="4" />
+            <Setter Property="VerticalOptions"
+                    Value="CenterAndExpand" />
         </Style>
         
     </Application.Resources>

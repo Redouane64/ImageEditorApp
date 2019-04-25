@@ -1,5 +1,7 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -7,25 +9,58 @@ namespace ImageEditor.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private ImageSource imageSource = null;
+        private Stream imageStream = null;
+        private object currentEditView = null;
+        private bool isEditMode = false;
 
         public MainViewModel()
         {
-            this.imageSource = ImageSource.FromFile("camera.png");
             this.PickImageCommand = new Command(async () => await this.PickImageAsync());
             this.TakeImageCommand = new Command(async () => await this.TakeImageAsync());
+            this.RotateImageCommand = new Command(RotateImage);
         }
 
-        public ImageSource Image
+        public bool IsEditMode
+        {
+            get { return this.isEditMode;  }
+            set { SetProperty(ref this.isEditMode, value, nameof(IsEditMode)); }
+        }
+
+        public object CurrentEditView
+        {
+            get { return this.currentEditView; }
+            set { SetProperty(ref this.currentEditView, value, nameof(CurrentEditView)); }
+        }
+
+        public Command RotateImageCommand { get; }
+
+        private void RotateImage(object argument)
+        {
+            IsEditMode = !IsEditMode;
+
+            if(IsEditMode)
+            {
+                var rotateImageEditView = new Views.RotateImageView();
+                rotateImageEditView.BindingContext = new ViewModels.RotateImageNinetyDegreeViewModel();
+
+                this.CurrentEditView = rotateImageEditView;
+            }
+            else
+            {
+
+            }
+        }
+
+        public Stream ImageStream
         {
             get
             {
-                return this.imageSource;
+                return this.imageStream;
             }
 
             set
             {
-                base.SetProperty(ref imageSource, value, nameof(Image));
+                base.SetProperty(ref imageStream, value, nameof(ImageStream));
             }
         }
 
@@ -41,7 +76,7 @@ namespace ImageEditor.ViewModels
 
                 if (media is null) return;
 
-                Image = ImageSource.FromStream(media.GetStream);
+                ImageStream = media.GetStream();
             }
         }
 
@@ -60,8 +95,9 @@ namespace ImageEditor.ViewModels
 
                 if (media is null) return;
 
-                Image = ImageSource.FromStream(media.GetStream);                
+                ImageStream = media.GetStream();
             }
         }
+
     }
 }

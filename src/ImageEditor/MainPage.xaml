@@ -2,10 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ImageEditor"
+             xmlns:views="clr-namespace:ImageEditor.Views"
+             xmlns:converters="clr-namespace:ImageEditor.Converters"
              xmlns:vm="clr-namespace:ImageEditor.ViewModels"
              x:Class="ImageEditor.MainPage">
     <ContentPage.Resources>
         <vm:MainViewModel x:Key="mainViewModel"></vm:MainViewModel>
+        <converters:StreamToImageSourceConverter x:Key="streamToImageConverter"></converters:StreamToImageSourceConverter>
     </ContentPage.Resources>
     <Grid x:Name="main"
           BindingContext="{StaticResource mainViewModel}"
@@ -13,50 +16,40 @@
 		<Grid.RowDefinitions>
 			<RowDefinition/>
 			<RowDefinition Height="7*"/>
-			<RowDefinition Height="2*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="2*"/>
 		</Grid.RowDefinitions>
         <StackLayout Grid.Row="0"
                      Padding="8,0,0,0"
                      BackgroundColor="{Binding Source={StaticResource EdgeWhiteColor}}" Orientation="Horizontal">
             <Button Style="{StaticResource ToolButtonStyle}"
-                    Command="{Binding PickImageCommand}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"></Button>
+                    Command="{Binding PickImageCommand}"></Button>
             <Button Style="{StaticResource ToolButtonStyle}"
-                    Command="{Binding TakeImageCommand}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"></Button>
+                    Command="{Binding TakeImageCommand}"></Button>
         </StackLayout>
         <ContentView Grid.Row="1">
-            <Image Source="{Binding Image}"
+            <Image x:Name="canvas" Source="{Binding Image, Converter={StaticResource streamToImageConverter}}"
                    HorizontalOptions="CenterAndExpand"
                    VerticalOptions="CenterAndExpand"></Image>
         </ContentView>
-        
-        <ScrollView Grid.Row="2"
+        <ContentView Grid.Row="2"
+                     BackgroundColor="Wheat"
+                     HorizontalOptions="Fill"
+                     HeightRequest="64"
+                     IsVisible="{Binding IsEditMode}"
+                     Content="{Binding CurrentEditView}">
+            
+        </ContentView>
+        <ScrollView Grid.Row="3"
+                    Margin="0,-6,0,0"
                     VerticalScrollBarVisibility="Never"
-                    HorizontalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Default"
                     BackgroundColor="{StaticResource EdgeWhiteColor}">
-            <StackLayout Orientation="Horizontal"
-                         VerticalOptions="CenterAndExpand">
+            <StackLayout Orientation="Horizontal">
                 <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="1"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="2"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="3"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="4"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="5"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="6"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="7"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="8"></Button>
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                    Text="9"></Button>
+                        Text="R"
+                        Command="{Binding RotateImageCommand}"
+                        CommandParameter="{Binding ImageStream}"></Button>
             </StackLayout>
         </ScrollView>
     </Grid>
