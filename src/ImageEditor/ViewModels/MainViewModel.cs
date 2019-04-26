@@ -9,7 +9,6 @@ namespace ImageEditor.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private Stream imageStream = null;
         private object currentEditView = null;
         private bool isEditMode = false;
 
@@ -51,19 +50,6 @@ namespace ImageEditor.ViewModels
             }
         }
 
-        public Stream ImageStream
-        {
-            get
-            {
-                return this.imageStream;
-            }
-
-            set
-            {
-                base.SetProperty(ref imageStream, value, nameof(ImageStream));
-            }
-        }
-
         public Command PickImageCommand { get; private set; }
 
         private async Task PickImageAsync()
@@ -76,7 +62,7 @@ namespace ImageEditor.ViewModels
 
                 if (media is null) return;
 
-                ImageStream = media.GetStream();
+                MasterViewModel.Current.ImageStream = media.GetStream();
             }
         }
 
@@ -95,7 +81,7 @@ namespace ImageEditor.ViewModels
 
                 if (media is null) return;
 
-                ImageStream = media.GetStream();
+                MasterViewModel.Current.ImageStream = media.GetStream();
             }
         }
 
