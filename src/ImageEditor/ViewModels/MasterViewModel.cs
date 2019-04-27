@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using ImageEditor.Services;
+using Xamarin.Forms;
 
 namespace ImageEditor.ViewModels
 {
@@ -15,48 +17,36 @@ namespace ImageEditor.ViewModels
          */
         public static MasterViewModel Current { get; private set; }
 
+        public PhotosService photoService = null;
+
         private Stream imageStream = null;
 
-        public MasterViewModel() { MasterViewModel.Current = this; }
+        public MasterViewModel()
+        {
+            MasterViewModel.Current = this;
 
-        public MainViewModel ImageAcquirementViewModel { get; private set; } = new MainViewModel();
+            this.photoService = new PhotosService();
+
+            this.BrowseImageCommand = new Command(async () => await this.photoService.PickImageAsync());
+            this.TakeImageCommand = new Command(async () => await this.photoService.TakeImageAsync());
+        }
 
         public Stream ImageStream
         {
-            get => this.imageStream;
+            /* Return a copy of stream. */
+            get => Utilities.StreamHelpers.Copy(this.imageStream);
 
             /* this setter will create a new stream and assign it to backing field. */
             set
             {
-                try
-                {
-                    var stream = this.Copy(value);
-                    base.SetProperty(ref this.imageStream, stream, nameof(ImageStream));
-                }
-                finally { }
+                var stream = Utilities.StreamHelpers.Copy(value);
+                base.SetProperty(ref this.imageStream, stream, nameof(ImageStream));
             }
         }
 
-        private Stream Copy(Stream source)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+        public Command BrowseImageCommand { get; private set; }
 
-            try
-            {
-                var buffer = new byte[source.Length];
-                source.Read(buffer, 0, buffer.Length);
+        public Command TakeImageCommand { get; private set; }
 
-                // Reset read position of source stream to begining.
-                source.Seek(0, SeekOrigin.Begin);
-
-                return new MemoryStream(buffer);
-            }
-            finally
-            {
-            }
-        }
     }
 }

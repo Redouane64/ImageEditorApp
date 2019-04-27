@@ -6,7 +6,7 @@ using Plugin.Media.Abstractions;
 
 namespace ImageEditor.Services
 {
-    internal class PhotosService
+    public class PhotosService
     {
         public PhotosService() { }
 
