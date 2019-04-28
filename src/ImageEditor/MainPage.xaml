@@ -1,61 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ImageEditor"
     xmlns:views="clr-namespace:ImageEditor.Views"
     xmlns:converters="clr-namespace:ImageEditor.Converters"
     xmlns:vm="clr-namespace:ImageEditor.ViewModels"
     x:Class="ImageEditor.MainPage">
-    <Grid.Resources>
-        <vm:MasterViewModel x:Key="masterViewModel"></vm:MasterViewModel>
-        <converters:StreamToImageSourceConverter x:Key="streamToImageConverter"></converters:StreamToImageSourceConverter>
-    </Grid.Resources>
-    <Grid.BindingContext>
-        <Binding Source="{StaticResource masterViewModel}"></Binding>
-    </Grid.BindingContext>
-    <Grid x:Name="main"
-          BindingContext="{Binding ImageAcquirementViewModel}"
+    <ContentPage.Resources>
+        <vm:MasterViewModel x:Key="MasterViewModel"></vm:MasterViewModel>
+        <converters:StreamToImageSourceConverter x:Key="StreamToImageConverter"></converters:StreamToImageSourceConverter>
+    </ContentPage.Resources>
+    <Grid BindingContext="{StaticResource MasterViewModel}"
           BackgroundColor="{StaticResource MainColor}">
 		<Grid.RowDefinitions>
 			<RowDefinition/>
-			<RowDefinition Height="7*"/>
-            <RowDefinition Height="64"/>
-            <RowDefinition Height="2*"/>
+			<RowDefinition Height="6*"/>
+            <RowDefinition/>
 		</Grid.RowDefinitions>
+        
         <StackLayout Grid.Row="0"
                      Padding="8,0,0,0"
-                     BackgroundColor="{Binding Source={StaticResource EdgeWhiteColor}}" 
+                     BackgroundColor="{StaticResource EdgeWhiteColor}" 
                      Orientation="Horizontal">
             <Button Style="{StaticResource ToolButtonStyle}"
-                    Command="{Binding PickImageCommand}"></Button>
+                    Command="{Binding BrowseImageCommand}"></Button>
             <Button Style="{StaticResource ToolButtonStyle}"
                     Command="{Binding TakeImageCommand}"></Button>
         </StackLayout>
+        
         <ContentView Grid.Row="1">
-            <Image x:Name="canvas" Source="{Binding ImageStream, Converter={StaticResource streamToImageConverter}}"
+            <Image x:Name="canvas"
+                   Source="{Binding ImageStream, Converter={StaticResource StreamToImageConverter}}"
                    HorizontalOptions="CenterAndExpand"
                    VerticalOptions="CenterAndExpand"></Image>
         </ContentView>
-        <ContentView Grid.Row="2"
-                     BackgroundColor="#F0F0F0"
-                     HorizontalOptions="Fill"
-                     HeightRequest="64"
-                     IsVisible="{Binding IsEditMode}"
-                     Content="{Binding CurrentEditView}">
-            
-        </ContentView>
+
         <ScrollView Grid.Row="3"
                     Margin="0,-6,0,0"
+                    Orientation="Horizontal"
                     VerticalScrollBarVisibility="Never"
                     HorizontalScrollBarVisibility="Default"
                     BackgroundColor="{StaticResource EdgeWhiteColor}">
             <StackLayout Orientation="Horizontal">
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                        Text="R"
-                        Command="{Binding RotateImageCommand}"
-                        CommandParameter="{Binding ImageStream}"></Button>
+                <!-- TODO: List of edits available (list of buttons).-->
             </StackLayout>
         </ScrollView>
     </Grid>
 
-</Grid>
+</ContentPage>
