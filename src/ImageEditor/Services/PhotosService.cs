@@ -34,12 +34,17 @@ namespace ImageEditor.Services
 
             if (CrossMedia.Current.IsTakePhotoSupported)
             {
-                var media = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions()
+                try
                 {
-                    RotateImage = true
-                });
 
-                if (!(media == null)) result = media.GetStream();
+                    var media = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions()
+                    {
+                        RotateImage = true
+                    });
+
+                    if (!(media == null)) result = media.GetStream();
+                }
+                catch { }
             }
 
             return result;

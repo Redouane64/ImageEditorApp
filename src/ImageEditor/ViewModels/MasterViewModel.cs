@@ -17,9 +17,9 @@ namespace ImageEditor.ViewModels
          */
         public static MasterViewModel Current { get; private set; }
 
-        public PhotosService photoService = null;
-
+        private PhotosService photoService = null;
         private Stream imageStream = null;
+        private bool isEditing;
 
         public MasterViewModel()
         {
@@ -27,11 +27,9 @@ namespace ImageEditor.ViewModels
 
             this.photoService = new PhotosService();
 
-            this.BrowseImageCommand = new Command(async () => await this.photoService.PickImageAsync());
-            this.TakeImageCommand = new Command(async () => await this.photoService.TakeImageAsync());
+            this.BrowseImageCommand = new Command(async () => this.ImageStream = await this.photoService.PickImageAsync());
+            this.TakeImageCommand = new Command(async () => this.ImageStream = await this.photoService.TakeImageAsync());
         }
-
-        private bool isEditing;
 
         public bool IsEditing
         {
@@ -42,11 +40,18 @@ namespace ImageEditor.ViewModels
         public Stream ImageStream
         {
             /* Return a copy of stream. */
-            get => Utilities.StreamHelpers.Copy(this.imageStream);
+            get
+            {
+                if (this.imageStream == null) return null;
+
+                return Utilities.StreamHelpers.Copy(this.imageStream);
+            }
 
             /* this setter will create a new stream and assign it to backing field. */
             set
             {
+                if (value == null) return;
+
                 var stream = Utilities.StreamHelpers.Copy(value);
                 base.SetProperty(ref this.imageStream, stream, nameof(ImageStream));
             }
