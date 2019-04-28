@@ -31,6 +31,14 @@ namespace ImageEditor.ViewModels
             this.TakeImageCommand = new Command(async () => await this.photoService.TakeImageAsync());
         }
 
+        private bool isEditing;
+
+        public bool IsEditing
+        {
+            get { return isEditing; }
+            set { base.SetProperty(ref this.isEditing, value, nameof(IsEditing)); }
+        }
+
         public Stream ImageStream
         {
             /* Return a copy of stream. */
