@@ -31,11 +31,12 @@
         <ContentView Grid.Row="1">
             <Image x:Name="canvas"
                    Source="{Binding ImageStream, Converter={StaticResource StreamToImageConverter}}"
-                   HorizontalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand" 
+                   Aspect="AspectFill"
                    VerticalOptions="CenterAndExpand"></Image>
         </ContentView>
 
-        <ScrollView Grid.Row="3"
+        <ScrollView Grid.Row="2"
                     Margin="0,-6,0,0"
                     Orientation="Horizontal"
                     VerticalScrollBarVisibility="Never"
