@@ -37,7 +37,6 @@
         </ContentView>
 
         <ScrollView Grid.Row="2"
-                    Margin="0,-6,0,0"
                     Orientation="Horizontal"
                     VerticalScrollBarVisibility="Never"
                     HorizontalScrollBarVisibility="Default"
