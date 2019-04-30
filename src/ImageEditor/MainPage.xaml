@@ -3,10 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ImageEditor"
     xmlns:converters="clr-namespace:ImageEditor.Converters"
-    xmlns:vm="clr-namespace:ImageEditor.ViewModels"
+    xmlns:viewmodels="clr-namespace:ImageEditor.ViewModels"
     x:Class="ImageEditor.MainPage">
     <ContentPage.Resources>
-        <vm:MasterViewModel x:Key="MasterViewModel"></vm:MasterViewModel>
+        <viewmodels:MasterViewModel x:Key="MasterViewModel">
+        </viewmodels:MasterViewModel>
         <converters:StreamToImageSourceConverter x:Key="StreamToImageConverter"></converters:StreamToImageSourceConverter>
         <converters:TopBarVisibiltyConverter x:Key="TopBarVisibilityConverter"></converters:TopBarVisibiltyConverter>
     </ContentPage.Resources>
@@ -43,31 +44,24 @@
                     VerticalScrollBarVisibility="Never"
                     HorizontalScrollBarVisibility="Default"
                     BackgroundColor="{StaticResource EdgeWhiteColor}">
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal"
+                         Margin="8">
                 <!-- TODO: List of edits available (list of buttons).-->
-                <Button Style="{StaticResource OptionsButtonStyle}"
+                <Button Style="{StaticResource CommandButtonStyle}"
                         Text="ROT"
-                        Command="{Binding ToggleEditingModeCommand}"
-                        CommandParameter="rotate"/>
+                        CommandParameter="{x:Type viewmodels:RotateImageEditorViewModel}"/>
+                <Button Style="{StaticResource CommandButtonStyle}"
+                        Text="SCL"
+                        CommandParameter="{x:Type viewmodels:ImageScaleEditorViewModel}" />
             </StackLayout>
         </ScrollView>
         
-        <!-- Editor -->
+        <!-- Editor: it will show up when editing mode is toggled on. -->
         <ContentView BackgroundColor="#5fac"
                      VerticalOptions="EndAndExpand"
                      Margin="0,0,0,60"
-                     IsVisible="{Binding IsEditing}">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="CenterAndExpand">
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                        Text="CCW"/>
-                <Slider WidthRequest="220"
-                        MinimumTrackColor="Black"
-                        MaximumTrackColor="Black"
-                        ThumbColor="Black" />
-                <Button Style="{StaticResource OptionsButtonStyle}"
-                        Text="CW"/>
-            </StackLayout>
+                     IsVisible="{Binding IsEditing}"
+                     ControlTemplate="{Binding EditorTemplate}">
         </ContentView>
     </Grid>
 

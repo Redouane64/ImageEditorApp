@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ImageEditor.ViewModels"
              x:Class="ImageEditor.App">
     <Application.Resources>
         <Color x:Key="EdgeWhiteColor">#5fff</Color>
@@ -12,14 +13,14 @@
         <Style x:Key="SmallTextButton"
                TargetType="Button">
             <Setter Property="FontSize"
-                    Value="12" />
+                    Value="10" />
         </Style>
 
         <Style x:Key="ToolButtonStyle" 
                TargetType="Button" 
                BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius" 
-                    Value="50" />
+                    Value="48" />
             <Setter Property="WidthRequest" 
                     Value="48" />
             <Setter Property="HeightRequest" 
@@ -34,11 +35,11 @@
                     Value="CenterAndExpand" />
         </Style>
 
-        <Style x:Key="OptionsButtonStyle"
+        <Style x:Key="EditorButtonStyle"
                TargetType="Button"
                BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius"
-                    Value="100" />
+                    Value="48" />
             <Setter Property="WidthRequest"
                     Value="48" />
             <Setter Property="HeightRequest"
@@ -49,11 +50,58 @@
                     Value="{StaticResource BorderColor}" />
             <Setter Property="BorderWidth"
                     Value="1" />
-            <Setter Property="Margin"
-                    Value="4" />
-            <Setter Property="VerticalOptions"
-                    Value="CenterAndExpand" />
+        </Style>
+
+        <Style x:Key="CommandButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource EditorButtonStyle}">
+            <Setter Property="Command"
+                    Value="{Binding ToggleEditingModeCommand}" />
         </Style>
         
+        <!-- Rotate Image Editor Resources -->
+        <viewmodels:RotateImageEditorViewModel x:Key="RotateImageEditorViewModel">
+        </viewmodels:RotateImageEditorViewModel>
+        <ControlTemplate x:DataType="viewmodels:RotateImageEditorViewModel"
+                         x:Key="RotateImageEditorControlTemplate">
+            <StackLayout Orientation="Horizontal"
+                         Padding="4"
+                         BindingContext="{StaticResource RotateImageEditorViewModel}"
+                         HorizontalOptions="CenterAndExpand">
+                <Button Style="{StaticResource EditorButtonStyle}"
+                        Command="{Binding RotateCommand}"
+                        Text="CCW" />
+                <Slider WidthRequest="220"
+                        Minimum="0"
+                        Maximum="360"
+                        Value="{Binding Angle, Mode=TwoWay}"
+                        MinimumTrackColor="Black"
+                        MaximumTrackColor="Black"
+                        ThumbColor="Black" />
+                <Button Style="{StaticResource EditorButtonStyle}"
+                        Command="{Binding RotateCommand}"
+                        Text="CW" />
+            </StackLayout>
+        </ControlTemplate>
+        
+        <!-- Scale Image Editor Resources -->
+        <viewmodels:ImageScaleEditorViewModel x:Key="ImageScaleEditorViewModel">
+        </viewmodels:ImageScaleEditorViewModel>
+        <ControlTemplate x:DataType="viewmodels:ImageScaleEditorViewModel"
+                         x:Key="ImageScaleEditorControlTemplate">
+            <StackLayout Orientation="Horizontal"
+                         Padding="4"
+                         HeightRequest="32"
+                         BindingContext="{StaticResource ImageScaleEditorViewModel}"
+                         HorizontalOptions="CenterAndExpand">
+                <Slider WidthRequest="220"
+                        Minimum="-2"
+                        Maximum="2"
+                        Value="{Binding Scale, Mode=TwoWay}"
+                        MinimumTrackColor="Black"
+                        MaximumTrackColor="Black"
+                        ThumbColor="Black" />
+            </StackLayout>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

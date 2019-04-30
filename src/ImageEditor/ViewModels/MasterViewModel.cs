@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using ImageEditor.Services;
 using Xamarin.Forms;
 
@@ -18,14 +19,18 @@ namespace ImageEditor.ViewModels
         public static MasterViewModel Current { get; private set; }
 
         private PhotosService photoService = null;
+        private ControlTemplatesLookupService templatesLookupService = null;
+
         private Stream imageStream = null;
         private bool isEditing;
+        private ControlTemplate editorTemplate;
 
         public MasterViewModel()
         {
             MasterViewModel.Current = this;
 
             this.photoService = new PhotosService();
+            this.templatesLookupService = new ControlTemplatesLookupService();
 
             this.BrowseImageCommand = new Command(async () => this.ImageStream = await this.photoService.PickImageAsync());
             this.TakeImageCommand = new Command(async () => this.ImageStream = await this.photoService.TakeImageAsync());
@@ -58,6 +63,12 @@ namespace ImageEditor.ViewModels
             }
         }
 
+        public ControlTemplate EditorTemplate
+        {
+            get => this.editorTemplate;
+            set => base.SetProperty(ref this.editorTemplate, value, nameof(EditorTemplate));
+        }
+
         public Command BrowseImageCommand { get; private set; }
 
         public Command TakeImageCommand { get; private set; }
@@ -66,7 +77,12 @@ namespace ImageEditor.ViewModels
 
         private void ToggleEditingMode(object argument)
         {
+            // Toggle editing mode.
             this.IsEditing = !IsEditing;
+
+            // Populate editor view template.
+            this.EditorTemplate = this.templatesLookupService.GetTemplate(argument as Type);
+
         }
 
     }
