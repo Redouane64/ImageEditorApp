@@ -3,13 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ImageEditor.App">
     <Application.Resources>
-        <Color x:Key="EdgeWhiteColor">White</Color>
+        <Color x:Key="EdgeWhiteColor">#5fff</Color>
         <Color x:Key="RedishColor">#fb001F</Color>
         <Color x:Key="BorderColor">#202020</Color>
         <Color x:Key="OrangeColor">Orange</Color>
-        <Color x:Key="MainColor">#CBCBCB</Color>
+        <Color x:Key="MainColor">White</Color>
 
-        <Style x:Key="ToolButtonStyle" TargetType="Button">
+        <Style x:Key="SmallTextButton"
+               TargetType="Button">
+            <Setter Property="FontSize"
+                    Value="12" />
+        </Style>
+
+        <Style x:Key="ToolButtonStyle" 
+               TargetType="Button" 
+               BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius" 
                     Value="50" />
             <Setter Property="WidthRequest" 
@@ -27,7 +35,8 @@
         </Style>
 
         <Style x:Key="OptionsButtonStyle"
-               TargetType="Button">
+               TargetType="Button"
+               BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius"
                     Value="100" />
             <Setter Property="WidthRequest"

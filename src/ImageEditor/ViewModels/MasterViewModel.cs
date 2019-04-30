@@ -29,6 +29,7 @@ namespace ImageEditor.ViewModels
 
             this.BrowseImageCommand = new Command(async () => this.ImageStream = await this.photoService.PickImageAsync());
             this.TakeImageCommand = new Command(async () => this.ImageStream = await this.photoService.TakeImageAsync());
+            this.ToggleEditingModeCommand = new Command(new Action<object>(ToggleEditingMode));
         }
 
         public bool IsEditing
@@ -60,6 +61,13 @@ namespace ImageEditor.ViewModels
         public Command BrowseImageCommand { get; private set; }
 
         public Command TakeImageCommand { get; private set; }
+
+        public Command ToggleEditingModeCommand { get; private set; }
+
+        private void ToggleEditingMode(object argument)
+        {
+            this.IsEditing = !IsEditing;
+        }
 
     }
 }
