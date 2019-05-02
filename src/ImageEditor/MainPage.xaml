@@ -4,6 +4,7 @@
     xmlns:local="clr-namespace:ImageEditor"
     xmlns:converters="clr-namespace:ImageEditor.Converters"
     xmlns:viewmodels="clr-namespace:ImageEditor.ViewModels"
+    xmlns:constants="clr-namespace:ImageEditor.Constants"
     x:Class="ImageEditor.MainPage">
     <ContentPage.Resources>
         <viewmodels:MasterViewModel x:Key="MasterViewModel">
@@ -49,10 +50,10 @@
                 <!-- TODO: List of edits available (list of buttons).-->
                 <Button Style="{StaticResource CommandButtonStyle}"
                         Text="ROT"
-                        CommandParameter="{x:Type viewmodels:RotateImageEditorViewModel}"/>
+                        CommandParameter="{x:Static constants:EditorControlTemplateKeysConstants.ImageRotationEditorControlTemplateKey}"/>
                 <Button Style="{StaticResource CommandButtonStyle}"
                         Text="SCL"
-                        CommandParameter="{x:Type viewmodels:ImageScaleEditorViewModel}" />
+                        CommandParameter="{x:Static constants:EditorControlTemplateKeysConstants.ImageScaleEditorControlTemplateKey}" />
             </StackLayout>
         </ScrollView>
         

@@ -81,7 +81,7 @@ namespace ImageEditor.ViewModels
             this.IsEditing = !IsEditing;
 
             // Populate editor view template.
-            this.EditorTemplate = this.templatesLookupService.GetTemplate(argument as Type);
+            this.EditorTemplate = this.templatesLookupService.GetTemplate(argument.ToString());
 
         }
 
