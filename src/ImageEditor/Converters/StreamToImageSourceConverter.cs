@@ -13,14 +13,15 @@ namespace ImageEditor.Converters
         {
             if (value is null) return null;
 
-            if(value is Stream imageStream)
-            {
-                return ImageSource.FromStream(() => imageStream);
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
+            var stream = value as Stream;
+
+            if (stream == null) throw new ArgumentException();
+
+            var copyStream = Utilities.StreamHelpers.Copy(stream);
+
+            // we need to give ImageSource.FromStream a copy because this API
+            // disposes the stream after consumption.
+            return ImageSource.FromStream(() => copyStream);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

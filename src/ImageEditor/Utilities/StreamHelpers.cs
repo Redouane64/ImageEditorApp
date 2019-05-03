@@ -17,9 +17,8 @@ namespace ImageEditor.Utilities
 
             try
             {
-                // Reset read position of source stream to begining.
-                source.Seek(0, SeekOrigin.Begin);
-
+                // Source stream reading position is garenteed to be zero
+                // at this line of code.
                 var buffer = new byte[source.Length];
                 source.Read(buffer, 0, buffer.Length);
 

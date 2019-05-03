@@ -48,18 +48,18 @@ namespace ImageEditor.ViewModels
             /* Return a copy of stream. */
             get
             {
-                if (this.imageStream == null) return null;
-
-                return Utilities.StreamHelpers.Copy(this.imageStream);
+                return this.imageStream;
             }
 
             /* this setter will create a new stream and assign it to backing field. */
             set
             {
-                if (value == null) return;
+                base.SetProperty(ref this.imageStream, value, nameof(ImageStream));
 
-                var stream = Utilities.StreamHelpers.Copy(value);
-                base.SetProperty(ref this.imageStream, stream, nameof(ImageStream));
+                // Always make sure that the stored image stream position is 
+                // set to zero. this is important when re-using this stream
+                // to edit image.
+                this.imageStream?.Seek(0, SeekOrigin.Begin);
             }
         }
 
