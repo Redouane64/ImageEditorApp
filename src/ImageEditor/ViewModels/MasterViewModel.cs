@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using ImageEditor.Services;
 using Xamarin.Forms;
 
@@ -24,6 +23,7 @@ namespace ImageEditor.ViewModels
         private Stream imageStream = null;
         private bool isEditing;
         private ControlTemplate editorTemplate;
+        private SkiaSharp.SKBitmap bitmap;
 
         public MasterViewModel()
         {
@@ -48,19 +48,30 @@ namespace ImageEditor.ViewModels
             /* Return a copy of stream. */
             get
             {
+                this.imageStream?.Seek(0, SeekOrigin.Begin);
                 return this.imageStream;
             }
 
             /* this setter will create a new stream and assign it to backing field. */
             set
             {
-                base.SetProperty(ref this.imageStream, value, nameof(ImageStream));
-
                 // Always make sure that the stored image stream position is 
                 // set to zero. this is important when re-using this stream
                 // to edit image.
-                this.imageStream?.Seek(0, SeekOrigin.Begin);
+                value?.Seek(0, SeekOrigin.Begin);
+                base.SetProperty(ref this.imageStream, value, nameof(ImageStream), OnImageStreamChanges);
             }
+        }
+
+        private void OnImageStreamChanges()
+        {
+            var data = SkiaSharp.SKData.Create(this.imageStream);
+            this.bitmap = SkiaSharp.SKBitmap.Decode(data);
+        }
+
+        public SkiaSharp.SKBitmap Bitmap
+        {
+            get => this.bitmap;
         }
 
         public ControlTemplate EditorTemplate
