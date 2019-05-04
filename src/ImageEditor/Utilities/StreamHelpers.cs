@@ -32,5 +32,18 @@ namespace ImageEditor.Utilities
             }
         }
 
+        public static void ShouldSeekToZero(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            if (stream.CanSeek && stream.Position != 0)
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+        }
+
     }
 }
