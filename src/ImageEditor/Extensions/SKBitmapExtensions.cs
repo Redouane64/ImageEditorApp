@@ -26,25 +26,23 @@ namespace ImageEditor.Extensions
                         .ContinueWith<Stream>((t) => { 
 
                         // Grab the new pixels and encode it to a PNG image.
-                        //bitmap.Pixels = t.Result;
-
                         var _bitmap = new SkiaSharp.SKBitmap(bitmap.Height, bitmap.Width);
                         _bitmap.Pixels = t.Result;
 
                         var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
 
-                        MemoryStream output = new MemoryStream();
-                        using (var wStream = new SkiaSharp.SKManagedWStream(output))
+                        MemoryStream pngImageStream = new MemoryStream();
+                        using (var wStream = new SkiaSharp.SKManagedWStream(pngImageStream))
                         {
                             pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
                         }
                 
-                        return output;
+                        return pngImageStream;
 
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
             }
-            catch (TaskCanceledException tce)
+            catch (TaskCanceledException)
             {
                 // Task cancelled due to failure.
             }

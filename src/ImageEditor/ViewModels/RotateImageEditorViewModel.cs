@@ -5,18 +5,27 @@ using SkiaSharp;
 using System.IO;
 using ImageEditor.Extensions;
 using System.Threading.Tasks;
+using ImageEditor.Utilities;
 
 namespace ImageEditor.ViewModels
 {
     internal class RotateImageEditorViewModel : ViewModelBase
     {
+        public enum RotationDirection
+        {
+            CW, CCW
+        }
+
+        public static RotationDirection CW => RotationDirection.CW;
+        public static RotationDirection CCW => RotationDirection.CCW;
+
         private Services.ImageEditingService imageEditingService;
         private int angle = 0;
 
         public RotateImageEditorViewModel()
         {
             this.imageEditingService = new Services.ImageEditingService();
-            this.RotateCommand = new Command(async () => await this.ApplyRotationAsync());
+            this.RotateCommand = new Command<RotationDirection>(async (arg) => await this.ApplyRotationAsync(arg));
         }
 
 
@@ -28,7 +37,7 @@ namespace ImageEditor.ViewModels
 
         public Command RotateCommand { get; }
 
-        private async Task ApplyRotationAsync()
+        private async Task ApplyRotationAsync(RotationDirection direction)
         {
 
             MasterViewModel.Current.ImageStream = await MasterViewModel.Current.Bitmap.ApplyOperationAsync((source) => {
@@ -36,9 +45,18 @@ namespace ImageEditor.ViewModels
                 int height = MasterViewModel.Current.Bitmap.Height, 
                     width = MasterViewModel.Current.Bitmap.Width;
 
-                var a_copy = this.imageEditingService.RotateCW(source, height, width);
+                SkiaSharp.SKColor[] pixels = null;
 
-                return a_copy;
+                if (direction == RotationDirection.CW)
+                {
+                    pixels = PixelsArrayHelpers.RotateCW(source, height, width);
+                }
+                else if (direction == RotationDirection.CCW)
+                {
+                    pixels = PixelsArrayHelpers.RotateCCW(source, height, width);
+                }
+
+                return pixels;
             });
 
         }

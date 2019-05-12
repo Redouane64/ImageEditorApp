@@ -70,6 +70,7 @@
                          HorizontalOptions="CenterAndExpand">
                 <Button Style="{StaticResource EditorButtonStyle}"
                         Command="{Binding RotateCommand}"
+                        CommandParameter="{x:Static viewmodels:RotateImageEditorViewModel.CCW}"
                         Text="CCW" />
                 <Slider WidthRequest="220"
                         Minimum="0"
@@ -80,6 +81,7 @@
                         ThumbColor="Black" />
                 <Button Style="{StaticResource EditorButtonStyle}"
                         Command="{Binding RotateCommand}"
+                        CommandParameter="{x:Static viewmodels:RotateImageEditorViewModel.CW}"
                         Text="CW" />
             </StackLayout>
         </ControlTemplate>
