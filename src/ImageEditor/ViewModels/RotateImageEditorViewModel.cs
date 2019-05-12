@@ -45,15 +45,16 @@ namespace ImageEditor.ViewModels
                 int height = MasterViewModel.Current.Bitmap.Height, 
                     width = MasterViewModel.Current.Bitmap.Width;
 
+                var sourcePixels = source as SkiaSharp.SKColor[];
                 SkiaSharp.SKColor[] pixels = null;
 
                 if (direction == RotationDirection.CW)
                 {
-                    pixels = PixelsArrayHelpers.RotateCW(source, height, width);
+                    pixels = PixelsArrayHelpers.RotateCW(sourcePixels, height, width);
                 }
                 else if (direction == RotationDirection.CCW)
                 {
-                    pixels = PixelsArrayHelpers.RotateCCW(source, height, width);
+                    pixels = PixelsArrayHelpers.RotateCCW(sourcePixels, height, width);
                 }
 
                 return pixels;

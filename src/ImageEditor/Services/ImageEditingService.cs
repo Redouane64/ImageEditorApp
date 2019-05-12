@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ImageEditor.Utilities;
 
 namespace ImageEditor.Services
 {
@@ -24,23 +25,5 @@ namespace ImageEditor.Services
             return newPixels;
         }
 
-        public SkiaSharp.SKColor[] RotateCW(SkiaSharp.SKColor[] pixels, int height, int width)
-        {
-            // TODO:
-
-            return pixels;
-        }
-
-        private SkiaSharp.SKColor[,] ArrayToMatrix(SkiaSharp.SKColor[] source, int rows, int colums)
-        {
-            var matrix = new SkiaSharp.SKColor[rows, colums];
-
-            for (int i = 0; i < source.Length; i++)
-            {
-
-            }
-
-            return matrix;
-        }
     }
 }

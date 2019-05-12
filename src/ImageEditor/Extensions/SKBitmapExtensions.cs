@@ -14,7 +14,7 @@ namespace ImageEditor.Extensions
         /// <param name="bitmap">Bitmap instance.</param>
         /// <param name="operation">Function that accepts and returns an array of pixels</param>
         /// <returns>Stream of PNG image.</returns>
-        public static async Task<Stream> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<SkiaSharp.SKColor[], SkiaSharp.SKColor[]> operation)
+        public static async Task<Stream> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<object, SkiaSharp.SKColor[]> operation)
         {
             Stream result = null;
 
@@ -22,25 +22,10 @@ namespace ImageEditor.Extensions
             {
                 // This may be a long running process so we run it on a seperate thread
                 // to avoid blocking the UI thread.
-                result = await Task.Run(() => operation(bitmap.Pixels))
-                        .ContinueWith<Stream>((t) => { 
+                var exec = new Task<SkiaSharp.SKColor[]>(new Func<object, SkiaSharp.SKColor[]>(operation), bitmap.Pixels);
+                exec.Start();
 
-                        // Grab the new pixels and encode it to a PNG image.
-                        var _bitmap = new SkiaSharp.SKBitmap(bitmap.Height, bitmap.Width);
-                        _bitmap.Pixels = t.Result;
-
-                        var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
-
-                        MemoryStream pngImageStream = new MemoryStream();
-                        using (var wStream = new SkiaSharp.SKManagedWStream(pngImageStream))
-                        {
-                            pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
-                        }
-                
-                        return pngImageStream;
-
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
-
+                result = await exec.ContinueWith<Stream>(ToPngStream, TaskContinuationOptions.OnlyOnRanToCompletion);
             }
             catch (TaskCanceledException)
             {
@@ -49,6 +34,27 @@ namespace ImageEditor.Extensions
             finally { }
 
             return result;
+        }
+
+        // Grab the new pixels and encode it to a PNG image.
+        private static Stream ToPngStream(Task<SkiaSharp.SKColor[]> pixels)
+        {
+            // Swap height and width.
+            var height = ViewModels.MasterViewModel.Current.Bitmap.Width;
+            var width = ViewModels.MasterViewModel.Current.Bitmap.Height;
+
+            var _bitmap = new SkiaSharp.SKBitmap(width, height);
+            _bitmap.Pixels = pixels.Result;
+
+            var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
+
+            MemoryStream pngImageStream = new MemoryStream();
+            using (var wStream = new SkiaSharp.SKManagedWStream(pngImageStream))
+            {
+                pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
+            }
+
+            return pngImageStream;
         }
     }
 }
