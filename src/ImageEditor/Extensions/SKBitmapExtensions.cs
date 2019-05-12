@@ -16,32 +16,41 @@ namespace ImageEditor.Extensions
         /// <returns>Stream of PNG image.</returns>
         public static async Task<Stream> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<SkiaSharp.SKColor[], SkiaSharp.SKColor[]> operation)
         {
+            Stream result = null;
 
             try
             {
                 // This may be a long running process so we run it on a seperate thread
                 // to avoid blocking the UI thread.
-                var result = await Task.Run(() => operation(bitmap.Pixels))
+                result = await Task.Run(() => operation(bitmap.Pixels))
                         .ContinueWith<Stream>((t) => { 
 
-                    // Grab the new pixels and encode it to a PNG image.
-                    bitmap.Pixels = t.Result;
-                    var pixelsMap = new SkiaSharp.SKPixmap(bitmap.Info, bitmap.GetAddr(0, 0));
+                        // Grab the new pixels and encode it to a PNG image.
+                        //bitmap.Pixels = t.Result;
 
-                    MemoryStream output = new MemoryStream();
-                    using (var wStream = new SkiaSharp.SKManagedWStream(output))
-                    {
-                        pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
-                    }
+                        var _bitmap = new SkiaSharp.SKBitmap(bitmap.Height, bitmap.Width);
+                        _bitmap.Pixels = t.Result;
+
+                        var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
+
+                        MemoryStream output = new MemoryStream();
+                        using (var wStream = new SkiaSharp.SKManagedWStream(output))
+                        {
+                            pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
+                        }
                 
-                    return output;
+                        return output;
 
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                return result;
+            }
+            catch (TaskCanceledException tce)
+            {
+                // Task cancelled due to failure.
             }
             finally { }
 
+            return result;
         }
     }
 }
