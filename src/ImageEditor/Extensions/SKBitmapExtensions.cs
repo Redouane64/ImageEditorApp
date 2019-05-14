@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageEditor.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -14,7 +15,10 @@ namespace ImageEditor.Extensions
         /// <param name="bitmap">Bitmap instance.</param>
         /// <param name="operation">Function that accepts and returns an array of pixels</param>
         /// <returns>Stream of PNG image.</returns>
-        public static async Task<Stream> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<object, SkiaSharp.SKColor[]> operation)
+        public static async Task<Stream> ApplyOperationAsync(
+            this SkiaSharp.SKBitmap bitmap, 
+            Func<BitmapData, BitmapData> operation, 
+            BitmapData data)
         {
             Stream result = null;
 
@@ -22,7 +26,11 @@ namespace ImageEditor.Extensions
             {
                 // This may be a long running process so we run it on a seperate thread
                 // to avoid blocking the UI thread.
-                var exec = new Task<SkiaSharp.SKColor[]>(new Func<object, SkiaSharp.SKColor[]>(operation), bitmap.Pixels);
+                var exec = new Task<BitmapData>((arg) => {
+                    var bitmapData = arg as BitmapData;
+                    return operation(bitmapData);
+                }, data);
+
                 exec.Start();
 
                 result = await exec.ContinueWith<Stream>(ToPngStream, TaskContinuationOptions.OnlyOnRanToCompletion);
@@ -37,14 +45,16 @@ namespace ImageEditor.Extensions
         }
 
         // Grab the new pixels and encode it to a PNG image.
-        private static Stream ToPngStream(Task<SkiaSharp.SKColor[]> pixels)
+        private static Stream ToPngStream(Task<BitmapData> data)
         {
+            var bitmapData = data.Result;
+
             // Swap height and width.
-            var height = ViewModels.MasterViewModel.Current.Bitmap.Width;
-            var width = ViewModels.MasterViewModel.Current.Bitmap.Height;
+            var height = bitmapData.Width;
+            var width = bitmapData.Height;
 
             var _bitmap = new SkiaSharp.SKBitmap(width, height);
-            _bitmap.Pixels = pixels.Result;
+            _bitmap.Pixels = bitmapData.Pixels;
 
             var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
 

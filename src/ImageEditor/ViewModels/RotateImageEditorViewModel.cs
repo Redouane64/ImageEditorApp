@@ -6,6 +6,7 @@ using System.IO;
 using ImageEditor.Extensions;
 using System.Threading.Tasks;
 using ImageEditor.Utilities;
+using ImageEditor.Models;
 
 namespace ImageEditor.ViewModels
 {
@@ -19,12 +20,10 @@ namespace ImageEditor.ViewModels
         public static RotationDirection CW => RotationDirection.CW;
         public static RotationDirection CCW => RotationDirection.CCW;
 
-        private Services.ImageEditingService imageEditingService;
         private int angle = 0;
 
         public RotateImageEditorViewModel()
         {
-            this.imageEditingService = new Services.ImageEditingService();
             this.RotateCommand = new Command<RotationDirection>(async (arg) => await this.ApplyRotationAsync(arg));
         }
 
@@ -39,27 +38,34 @@ namespace ImageEditor.ViewModels
 
         private async Task ApplyRotationAsync(RotationDirection direction)
         {
+            var data = new BitmapData
+            {
+                Height = MasterViewModel.Current.Bitmap.Height,
+                Width = MasterViewModel.Current.Bitmap.Width,
+                Pixels = MasterViewModel.Current.Bitmap.Pixels,
+                Extras = direction
+            };
 
-            MasterViewModel.Current.ImageStream = await MasterViewModel.Current.Bitmap.ApplyOperationAsync((source) => {
+            MasterViewModel.Current.ImageStream = await MasterViewModel.Current.Bitmap.ApplyOperationAsync(this.Rotate, data);
+        }
 
-                int height = MasterViewModel.Current.Bitmap.Height, 
-                    width = MasterViewModel.Current.Bitmap.Width;
+        private BitmapData Rotate(BitmapData data)
+        {
+            int height = data.Height,
+                width = data.Width;
 
-                var sourcePixels = source as SkiaSharp.SKColor[];
-                SkiaSharp.SKColor[] pixels = null;
+            var direction = (RotationDirection)data.Extras;
 
-                if (direction == RotationDirection.CW)
-                {
-                    pixels = PixelsArrayHelpers.RotateCW(sourcePixels, height, width);
-                }
-                else if (direction == RotationDirection.CCW)
-                {
-                    pixels = PixelsArrayHelpers.RotateCCW(sourcePixels, height, width);
-                }
+            if (direction == RotationDirection.CW)
+            {
+                data.Pixels = PixelsArrayHelpers.RotateCW(data.Pixels, height, width);
+            }
+            else if (direction == RotationDirection.CCW)
+            {
+                data.Pixels = PixelsArrayHelpers.RotateCCW(data.Pixels, height, width);
+            }
 
-                return pixels;
-            });
-
+            return data;
         }
 
         private void AngleChanges()
