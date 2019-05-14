@@ -5,9 +5,9 @@ using ImageEditor.Utilities;
 
 namespace ImageEditor.Services
 {
-    public class ImageEditingService
+    public class ImageFiltersService
     {
-        public ImageEditingService() { }
+        public ImageFiltersService() { }
 
         public SkiaSharp.SKColor[] InvertColors(SkiaSharp.SKColor[] pixels)
         {
