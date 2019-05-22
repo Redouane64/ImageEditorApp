@@ -9,5 +9,7 @@ namespace ImageEditor.Constants
         public static string ImageRotationEditorControlTemplateKey => "RotateImageEditorControlTemplate";
 
         public static string ImageScaleEditorControlTemplateKey => "ImageScaleEditorControlTemplate";
+
+        public static string ImageFiltersEditorControlTemplateKey => "ImageFiltersEditorTemplate";
     }
 }

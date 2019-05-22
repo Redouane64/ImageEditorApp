@@ -54,6 +54,9 @@
                 <Button Style="{StaticResource CommandButtonStyle}"
                         Text="SCL"
                         CommandParameter="{x:Static constants:EditorControlTemplateKeysConstants.ImageScaleEditorControlTemplateKey}" />
+                <Button Style="{StaticResource CommandButtonStyle}"
+                        Text="Filters"
+                        CommandParameter="{Static constants:EditorControlTemplateKeysConstants.ImageFiltersEditorControlTemplateKey}" />
             </StackLayout>
         </ScrollView>
         
