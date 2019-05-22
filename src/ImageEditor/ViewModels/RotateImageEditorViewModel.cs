@@ -46,7 +46,9 @@ namespace ImageEditor.ViewModels
                 Extras = direction
             };
 
-            MasterViewModel.Current.ImageStream = await MasterViewModel.Current.Bitmap.ApplyOperationAsync(this.Rotate, data);
+            //MasterViewModel.Current.ImageStream = await MasterViewModel.Current.Bitmap.ApplyOperationAsync(this.Rotate, data);
+            var bitmap = await MasterViewModel.Current.Bitmap.ApplyOperationAsync(Rotate, data);
+            MasterViewModel.Current.ImageStream = await bitmap.ToPngStreamAsync();
         }
 
         private BitmapData Rotate(BitmapData data)
@@ -64,6 +66,9 @@ namespace ImageEditor.ViewModels
             {
                 data.Pixels = PixelsArrayHelpers.RotateCCW(data.Pixels, height, width);
             }
+
+            data.Height = width;
+            data.Width = height;
 
             return data;
         }

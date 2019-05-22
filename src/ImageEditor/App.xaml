@@ -2,6 +2,7 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ImageEditor.ViewModels"
+             xmlns:filters="clr-namespace:ImageEditor.Filters"
              x:Class="ImageEditor.App">
     <Application.Resources>
         <Color x:Key="EdgeWhiteColor">#5fff</Color>
@@ -105,5 +106,28 @@
                         ThumbColor="Black" />
             </StackLayout>
         </ControlTemplate>
+        
+        <!-- Image Filters Editor Resources -->
+        <viewmodels:ImageFiltersEditorViewModel x:Key="ImageFiltersEditorViewModel">
+        </viewmodels:ImageFiltersEditorViewModel>
+        <ControlTemplate x:DataType="viewmodels:ImageFiltersEditorViewModel"
+                         x:Key="ImageFiltersEditorTemplate">
+            <ScrollView>
+                <StackLayout Orientation="Horizontal"
+                             Padding="4"
+                             HorizontalOptions="CenterAndExpand"
+                             BindingContext="{StaticResource ImageFiltersEditorViewModel}">
+                    <Button Style="{StaticResource EditorButtonStyle}"
+                            Text="{Binding InvertColorsFilter.Name}"
+                            Command="{Binding ApplyFilterCommand}"
+                            CommandParameter="{Binding InvertColorsFilter}"></Button>
+                    <Button Style="{StaticResource EditorButtonStyle}"
+                            Text="{Binding BlackAndWhiteFilter.Name}"
+                            Command="{Binding ApplyFilterCommand}"
+                            CommandParameter="{Binding BlackAndWhiteFilter}"></Button>
+                </StackLayout>
+            </ScrollView>
+        </ControlTemplate>
+        
     </Application.Resources>
 </Application>
