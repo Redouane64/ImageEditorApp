@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImageEditor.Extensions
@@ -15,48 +16,24 @@ namespace ImageEditor.Extensions
         /// <param name="bitmap">Bitmap instance.</param>
         /// <param name="operation">Function that accepts and returns an array of pixels</param>
         /// <returns>Stream of PNG image.</returns>
-        public static async Task<Stream> ApplyOperationAsync(
-            this SkiaSharp.SKBitmap bitmap, 
-            Func<BitmapData, BitmapData> operation, 
-            BitmapData data)
+        public static async Task<SkiaSharp.SKBitmap> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<BitmapData, BitmapData> operation, BitmapData data)
         {
-            Stream result = null;
 
             try
             {
                 // This may be a long running process so we run it on a seperate thread
                 // to avoid blocking the UI thread.
-                var exec = new Task<BitmapData>((arg) => {
-                    var bitmapData = arg as BitmapData;
-                    return operation(bitmapData);
-                }, data);
-
-                exec.Start();
-
-                result = await exec.ContinueWith<Stream>(ToPngStream, TaskContinuationOptions.OnlyOnRanToCompletion);
+                BitmapData result = await Task.Run<BitmapData>(function: () => operation(data), cancellationToken: CancellationToken.None);
+                return new SkiaSharp.SKBitmap(new SkiaSharp.SKImageInfo(result.Width, result.Height)) { Pixels = result.Pixels };
             }
-            catch (TaskCanceledException)
-            {
-                // Task cancelled due to failure.
-            }
+            catch (TaskCanceledException) { throw; }
             finally { }
 
-            return result;
         }
 
-        // Grab the new pixels and encode it to a PNG image.
-        private static Stream ToPngStream(Task<BitmapData> data)
+        public static async Task<Stream> ToPngStreamAsync(this SkiaSharp.SKBitmap bitmap)
         {
-            var bitmapData = data.Result;
-
-            // Swap height and width.
-            var height = bitmapData.Width;
-            var width = bitmapData.Height;
-
-            var _bitmap = new SkiaSharp.SKBitmap(width, height);
-            _bitmap.Pixels = bitmapData.Pixels;
-
-            var pixelsMap = new SkiaSharp.SKPixmap(_bitmap.Info, _bitmap.GetAddr(0, 0));
+            var pixelsMap = new SkiaSharp.SKPixmap(bitmap.Info, bitmap.GetAddr(0, 0));
 
             MemoryStream pngImageStream = new MemoryStream();
             using (var wStream = new SkiaSharp.SKManagedWStream(pngImageStream))
@@ -64,7 +41,8 @@ namespace ImageEditor.Extensions
                 pixelsMap.Encode(wStream, SkiaSharp.SKPngEncoderOptions.Default);
             }
 
-            return pngImageStream;
+            return await Task.FromResult(pngImageStream);
         }
+
     }
 }
