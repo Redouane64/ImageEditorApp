@@ -73,7 +73,7 @@
                         Command="{Binding RotateCommand}"
                         CommandParameter="{x:Static viewmodels:RotateImageEditorViewModel.CCW}"
                         Text="CCW" />
-                <Slider WidthRequest="220"
+                <Slider WidthRequest="200"
                         Minimum="0"
                         Maximum="360"
                         Value="{Binding Angle, Mode=TwoWay}"
