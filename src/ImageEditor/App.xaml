@@ -21,17 +21,17 @@
                TargetType="Button" 
                BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius" 
-                    Value="48" />
+                    Value="64" />
             <Setter Property="WidthRequest" 
-                    Value="48" />
+                    Value="64" />
             <Setter Property="HeightRequest" 
-                    Value="48" />
+                    Value="64" />
             <Setter Property="BackgroundColor" 
                     Value="{StaticResource OrangeColor}" />
             <Setter Property="BorderColor"
                     Value="{StaticResource BorderColor}" />
             <Setter Property="BorderWidth"
-                    Value="1" />
+                    Value="0" />
             <Setter Property="VerticalOptions"
                     Value="CenterAndExpand" />
         </Style>
@@ -40,17 +40,17 @@
                TargetType="Button"
                BasedOn="{StaticResource SmallTextButton}">
             <Setter Property="CornerRadius"
-                    Value="48" />
+                    Value="64" />
             <Setter Property="WidthRequest"
-                    Value="48" />
+                    Value="64" />
             <Setter Property="HeightRequest"
-                    Value="48" />
+                    Value="64" />
             <Setter Property="BackgroundColor"
                     Value="{StaticResource RedishColor}" />
             <Setter Property="BorderColor"
                     Value="{StaticResource BorderColor}" />
             <Setter Property="BorderWidth"
-                    Value="1" />
+                    Value="0" />
         </Style>
 
         <Style x:Key="CommandButtonStyle"
@@ -73,7 +73,7 @@
                         Command="{Binding RotateCommand}"
                         CommandParameter="{x:Static viewmodels:RotateImageEditorViewModel.CCW}"
                         Text="CCW" />
-                <Slider WidthRequest="220"
+                <Slider WidthRequest="200"
                         Minimum="0"
                         Maximum="360"
                         Value="{Binding Angle, Mode=TwoWay}"

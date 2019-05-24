@@ -6,6 +6,6 @@ namespace ImageEditor.Filters
     {
         public string Name { get; } = "B & W";
 
-        public SKColor[] Apply(SKColor[] pixels) => ImageEditor.Utilities.ImageFiltersHelpers.GreyScale(pixels);
+        public SKColor[] Apply(SKColor[] pixels, params object[] args) => Utilities.ImageFiltersHelpers.GreyScale(pixels);
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ImageEditor.Utilities
 {
-    internal static class StreamHelpers
+    public static class StreamHelpers
     {
 
         public static Stream Copy(Stream source)

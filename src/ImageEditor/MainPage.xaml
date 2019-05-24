@@ -31,10 +31,10 @@
                      HorizontalOptions="Center"
                      IsVisible="{Binding IsEditing, Converter={StaticResource TopBarVisibilityConverter}}">
             <Button Style="{StaticResource ToolButtonStyle}"
-                    Text="IMG"
+                    Text="IMAGE"
                     Command="{Binding BrowseImageCommand}"></Button>
             <Button Style="{StaticResource ToolButtonStyle}"
-                    Text="CAM"
+                    Text="CAMERA"
                     Command="{Binding TakeImageCommand}"></Button>
         </StackLayout>
         
@@ -49,10 +49,10 @@
                          Margin="8">
                 <!-- TODO: List of edits available (list of buttons).-->
                 <Button Style="{StaticResource CommandButtonStyle}"
-                        Text="ROT"
+                        Text="ROTATE"
                         CommandParameter="{x:Static constants:EditorControlTemplateKeysConstants.ImageRotationEditorControlTemplateKey}"/>
                 <Button Style="{StaticResource CommandButtonStyle}"
-                        Text="SCL"
+                        Text="SCALE"
                         CommandParameter="{x:Static constants:EditorControlTemplateKeysConstants.ImageScaleEditorControlTemplateKey}" />
                 <Button Style="{StaticResource CommandButtonStyle}"
                         Text="Filters"
@@ -63,7 +63,7 @@
         <!-- Editor: it will show up when editing mode is toggled on. -->
         <ContentView BackgroundColor="#5fac"
                      VerticalOptions="EndAndExpand"
-                     Margin="0,0,0,60"
+                     Margin="0,0,0,76"
                      IsVisible="{Binding IsEditing}"
                      ControlTemplate="{Binding EditorTemplate}">
         </ContentView>
