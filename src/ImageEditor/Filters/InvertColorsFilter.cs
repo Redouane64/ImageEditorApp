@@ -6,6 +6,6 @@ namespace ImageEditor.Filters
     {
         public string Name { get; } = "Invert Colors";
 
-        public SKColor[] Apply(SKColor[] pixels) => ImageEditor.Utilities.ImageFiltersHelpers.InvertColors(pixels);
+        public SKColor[] Apply(SKColor[] pixels, params object[] args) => Utilities.ImageFiltersHelpers.InvertColors(pixels);
     }
 }

@@ -8,6 +8,6 @@ namespace ImageEditor.Filters
     public interface IImageFilter
     {
         string Name { get; }
-        SKColor[] Apply(SKColor[] pixels);
+        SKColor[] Apply(SKColor[] pixels, params object[] args);
     }
 }
