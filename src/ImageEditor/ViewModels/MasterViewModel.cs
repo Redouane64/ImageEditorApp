@@ -49,7 +49,7 @@ namespace ImageEditor.ViewModels
             get
             {
                 this.imageStream?.Seek(0, SeekOrigin.Begin);
-                return this.imageStream;
+                return this.imageStream ?? Stream.Null;
             }
 
             /* this setter will create a new stream and assign it to backing field. */
@@ -59,7 +59,8 @@ namespace ImageEditor.ViewModels
                 // set to zero. this is important when re-using this stream
                 // to edit image.
                 value?.Seek(0, SeekOrigin.Begin);
-                base.SetProperty(ref this.imageStream, value, nameof(ImageStream), OnImageStreamChanges);
+                if(value != null)
+                    base.SetProperty(ref this.imageStream, value, nameof(ImageStream), OnImageStreamChanges);
             }
         }
 
