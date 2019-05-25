@@ -10,12 +10,6 @@ namespace ImageEditor.Extensions
 {
     internal static class SKBitmapExtensions
     {
-        /// <summary>
-        /// Apply an operation on pixels of the image.
-        /// </summary>
-        /// <param name="bitmap">Bitmap instance.</param>
-        /// <param name="operation">Function that accepts and returns an array of pixels</param>
-        /// <returns>Stream of PNG image.</returns>
         public static async Task<SkiaSharp.SKBitmap> ApplyOperationAsync(this SkiaSharp.SKBitmap bitmap, Func<BitmapData, BitmapData> operation, BitmapData data)
         {
 

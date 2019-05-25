@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ImageEditor.Utilities
 {
@@ -15,7 +17,7 @@ namespace ImageEditor.Utilities
                 Byte g = (byte)(255 - pixels[i].Green);
                 Byte b = (byte)(255 - pixels[i].Blue);
 
-                newPixels[i] = new SkiaSharp.SKColor(r, g, b);
+                newPixels[i] = new SkiaSharp.SKColor(r, g, b); // 0 255 255
             }
 
             return newPixels;
@@ -32,6 +34,34 @@ namespace ImageEditor.Utilities
             }
 
             return newPixels;
+        }
+
+        public static SkiaSharp.SKColor[] Scale(SkiaSharp.SKColor[] pixels, int height, int width, double scale)
+        {
+            double _width = width * scale;
+            double _height = (_width * ((double)height / (double)width));
+
+            var result = new SkiaSharp.SKColor[(int)(_width * _height)];
+
+            double dx = width / _width;
+            double dy = height / _height;
+
+            var scaleX = new int[(int)_width];
+            for (int i = 0; i < scaleX.Length; i++)
+            {
+                scaleX[i] = (int)(i * dx);
+            }
+
+            for (int j = 0; j < (int)_height; j++)
+            {
+                int y = (int)(j * dy);
+                for (int k = 0; k < (int)_width; k++)
+                {
+                    result[(int)(j * _width + k)] = pixels[y * width + scaleX[k]];
+                }
+            }
+
+            return result;
         }
     }
 }

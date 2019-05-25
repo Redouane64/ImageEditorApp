@@ -98,8 +98,8 @@
                          BindingContext="{StaticResource ImageScaleEditorViewModel}"
                          HorizontalOptions="CenterAndExpand">
                 <Slider WidthRequest="220"
-                        Minimum="-2"
-                        Maximum="2"
+                        Minimum="0.25"
+                        Maximum="3"
                         Value="{Binding Scale, Mode=TwoWay}"
                         MinimumTrackColor="Black"
                         MaximumTrackColor="Black"
